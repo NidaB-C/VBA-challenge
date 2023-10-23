@@ -51,6 +51,13 @@ Sub AnalyzeStockData()
                 Else
                     ws.Cells(writeRow, 10).Interior.Color = RGB(255, 0, 0)
                 End If
+
+                ' Apply conditional formatting for Percent Change
+                If percentChange > 0 Then
+                ws.Cells(writeRow, 11).Interior.Color = RGB(0, 255, 0)  ' Green for positive
+                Else
+                ws.Cells(writeRow, 11).Interior.Color = RGB(255, 0, 0)  ' Red for negative
+                End If  
                 
                 ' Update maximum and minimum values
                 If percentChange > maxIncrease Then
