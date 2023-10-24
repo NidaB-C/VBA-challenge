@@ -25,6 +25,10 @@ Sub AnalyzeStockData()
         ws.Cells(1, 12).Value = "Total Stock Volume"
         
         For i = 2 To lastRow
+        
+           ' Accumulate total volume
+                totalVolume = totalVolume + ws.Cells(i, 7).Value
+                
             If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
                 ' Set end price and ticker
                 endPrice = ws.Cells(i, 6).Value
@@ -47,17 +51,17 @@ Sub AnalyzeStockData()
                 
                 ' Apply conditional formatting
                 If yearlyChange > 0 Then
-                    ws.Cells(writeRow, 10).Interior.Color = RGB(0, 255, 0)
+                    ws.Cells(writeRow, 10).Interior.ColorIndex = 4
                 Else
-                    ws.Cells(writeRow, 10).Interior.Color = RGB(255, 0, 0)
+                    ws.Cells(writeRow, 10).Interior.ColorIndex = 3
                 End If
 
                 ' Apply conditional formatting for Percent Change
                 If percentChange > 0 Then
-                ws.Cells(writeRow, 11).Interior.Color = RGB(0, 255, 0)  ' Green for positive
+                ws.Cells(writeRow, 11).Interior.ColorIndex = 4
                 Else
-                ws.Cells(writeRow, 11).Interior.Color = RGB(255, 0, 0)  ' Red for negative
-                End If  
+                ws.Cells(writeRow, 11).Interior.ColorIndex = 3
+                End If
                 
                 ' Update maximum and minimum values
                 If percentChange > maxIncrease Then
@@ -76,12 +80,13 @@ Sub AnalyzeStockData()
                 ' Reset variables for next stock
                 writeRow = writeRow + 1
                 totalVolume = 0
-            Else
-                ' Accumulate total volume and set start price for the stock
-                totalVolume = totalVolume + ws.Cells(i, 7).Value
+                
+                Else
+                'Set start price for stock
                 If ws.Cells(i, 1).Value <> ws.Cells(i - 1, 1).Value Then
                     startPrice = ws.Cells(i, 3).Value
                 End If
+                
             End If
         Next i
         
@@ -99,6 +104,7 @@ Sub AnalyzeStockData()
         ws.Cells(3, 17).Value = maxDecrease
         ws.Cells(3, 17).NumberFormat = "0.00%"
         ws.Cells(4, 17).Value = maxVolume
+        
+        ws.Columns("A:P").AutoFit
     Next ws
 End Sub
-
